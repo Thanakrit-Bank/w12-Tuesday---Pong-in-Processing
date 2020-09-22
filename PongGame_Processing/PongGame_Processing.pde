@@ -39,6 +39,32 @@ class PongBall {
   void move() {
     y = y + speedY;
     x = x + speedX;
+    
+    if (ball.right() > width) {
+      ball.speedX = -ball.speedX;
+    }
+    if (ball.left() < 0) {
+      ball.speedX = -ball.speedX;
+    }
+    if (ball.bottom() > height) {
+      ball.speedY = -ball.speedY;
+    }
+    if (ball.top() < 0) {
+      ball.speedY = -ball.speedY;
+    }
+  }
+  
+  float left() {
+    return x-diameter/2;
+  }
+  float right() {
+    return x+diameter/2;
+  }
+  float top() {
+    return y-diameter/2;
+  }
+  float bottom() {
+    return y+diameter/2;
   }
 }
 
