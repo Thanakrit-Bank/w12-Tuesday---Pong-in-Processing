@@ -18,8 +18,32 @@ class PongPaddle {
     rect(x, y, w, h);
   }
   
-  // switch player when ball bounce
+  // ball bounce on paddle
   void bounce_ball() {
+    // check paddleLeft
+    if (ball.y - ball.diameter < y + h/2 && ball.y + ball.diameter > y - h/2 && ball.x - ball.diameter < x + w/2) {
+      if (ball.x > x) {
+        float diff = ball.y - (y - h/2);
+        float rad = radians(45);
+        float angle = map(diff, 0, h, -rad, rad);
+        ball.speedX = 5 * cos(angle);
+        ball.speedY = 5 * sin(angle);
+        ball.x = x + w/2 + ball.diameter;
+        //speedX *= -1;
+      }
+    }
+    
+    // check paddleRight
+    if (ball.y - ball.diameter < y + h/2 && ball.y + ball.diameter > y - h/2 && ball.x + ball.diameter > x + w/2) {
+      if (ball.x < x) {
+        //speedX *= -1;
+        float diff = ball.y - (y - h/2);
+        float angle = map(diff, 0, h, radians(225), radians(135));
+        ball.speedX = 5 * cos(angle);
+        ball.speedY = 5 * sin(angle);
+        ball.x = x - w/2 - ball.diameter;
+      }
+    }
   }
 }
 
@@ -29,9 +53,6 @@ class PongBall {
   float speedX = 5; 
   float speedY = random(-5,5);
   float diameter = 50;
-  
-  PongBall() {
-  }
   
   // draw ball
   void draw() {
@@ -59,9 +80,6 @@ class PongBall {
 }
 
 class PongGame {
-  
-  PongGame() {
-  }
   
   // draw tabble
   void draw() {
@@ -93,17 +111,27 @@ class PongGame {
   void update() {
     if (ball.x - ball.diameter > width) {
       paddleLeft.score += 1;
+      delay(600);
       game.serve_ball();
     }
     
     if (ball.x + ball.diameter < 0) {
       paddleRight.score += 1;
+      delay(600);
       game.serve_ball();
     }
   }
   
   // move paddle
   void on_touch_move() {
+    if (mousePressed == true) {
+      if (mouseX < width/2) {
+        paddleLeft.y = mouseY-120;
+      }
+      if (mouseX > width/2) {
+        paddleRight.y = mouseY-120;
+      }
+    }
   }
 }
 
