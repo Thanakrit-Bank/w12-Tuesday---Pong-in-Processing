@@ -2,14 +2,14 @@ class PongPaddle {
   int score = 0;
   int x;
   int y = 240;
-  int w = 30;
-  int h = 240;
+  int w = 20;
+  int h = 180;
   
   PongPaddle(boolean left) {    
     if (left) {
       x = 5;
     } else {
-      x = width - 35;
+      x = width - 25;
     }
   }
   
@@ -21,27 +21,25 @@ class PongPaddle {
   // ball bounce on paddle
   void bounce_ball() {
     // check paddleLeft
-    if (ball.y - ball.diameter < y + h/2 && ball.y + ball.diameter > y - h/2 && ball.x - ball.diameter < x + w/2) {
+    if (ball.y - ball.diameter < y + h && ball.y + ball.diameter > y - h/4 && ball.x - ball.diameter/2 < x + w/2) {
       if (ball.x > x) {
+        //ball.speedX *= -1;
         float diff = ball.y - (y - h/2);
         float rad = radians(45);
         float angle = map(diff, 0, h, -rad, rad);
-        ball.speedX = 5 * cos(angle);
-        ball.speedY = 5 * sin(angle);
-        ball.x = x + w/2 + ball.diameter;
-        //speedX *= -1;
+        ball.speedX = 10 * cos(angle);
+        ball.speedY = 10 * sin(angle);
       }
     }
     
     // check paddleRight
-    if (ball.y - ball.diameter < y + h/2 && ball.y + ball.diameter > y - h/2 && ball.x + ball.diameter > x + w/2) {
+    if (ball.y - ball.diameter < y + h && ball.y + ball.diameter > y - h/4 && ball.x + ball.diameter/2 > x + w/2) {
       if (ball.x < x) {
-        //speedX *= -1;
+        //ball.speedX *= -1;
         float diff = ball.y - (y - h/2);
         float angle = map(diff, 0, h, radians(225), radians(135));
-        ball.speedX = 5 * cos(angle);
-        ball.speedY = 5 * sin(angle);
-        ball.x = x - w/2 - ball.diameter;
+        ball.speedX = 10 * cos(angle);
+        ball.speedY = 10 * sin(angle); 
       }
     }
   }
@@ -50,8 +48,8 @@ class PongPaddle {
 class PongBall {
   float x = width/2;
   float y = height/2;
-  float speedX = 5; 
-  float speedY = random(-5,5);
+  float speedX = random(-8,8); 
+  float speedY = random(-4,4);
   float diameter = 50;
   
   // draw ball
@@ -98,12 +96,16 @@ class PongGame {
     ball.x = width/2;
     ball.y = height/2;
     
-    float angle = random(-PI/4, PI/4);
-    ball.speedX = 5 * cos(angle);
-    ball.speedY = 5 * sin(angle);
+    if (ball.x - ball.diameter > width) {
+      float angle = random(-PI/4, PI/4);
+      ball.speedX = 8 * cos(angle);
+      ball.speedY = 8 * sin(angle);
+    }
     
-    if (random(1) < 0.5) {
-      ball.speedY *= -1;
+    if (ball.x + ball.diameter < 0) {
+      float angle = random(-PI/4, PI/4);
+      ball.speedX = 8 * cos(angle);
+      ball.speedY = 8 * sin(angle);
     }
   }
   
