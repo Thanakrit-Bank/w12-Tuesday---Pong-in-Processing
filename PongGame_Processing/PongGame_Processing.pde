@@ -107,7 +107,7 @@ class PongGame {
     }
   }
   
-  // update player bounce and score
+  // update score when ball out of table and serve the ball
   void update() {
     if (ball.x - ball.diameter > width) {
       paddleLeft.score += 1;
@@ -136,12 +136,13 @@ class PongGame {
 }
 
 class PongApp {
+  boolean gameStart;
   
-  PongApp() {
-  }
-  
-  // start game?
+  // start game
   void build() {
+    if (mousePressed) {
+      gameStart = true;
+    }
   }
 }
 
@@ -162,16 +163,19 @@ void setup() {
 
 void draw() {
   background(0);
+  app.build();
   
-  paddleLeft.draw();
-  paddleLeft.bounce_ball();
-  paddleRight.draw();
-  paddleRight.bounce_ball();
+  if (app.gameStart) {
+    paddleLeft.draw();
+    paddleLeft.bounce_ball();
+    paddleRight.draw();
+    paddleRight.bounce_ball();
   
-  game.draw();
-  game.update();
-  game.on_touch_move();
+    game.draw();
+    game.update();
+    game.on_touch_move();
   
-  ball.draw();
-  ball.move();
+    ball.draw();
+    ball.move();
+  }
 }
