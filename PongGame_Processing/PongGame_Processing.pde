@@ -5,11 +5,7 @@ class PongPaddle {
   int w = 30;
   int h = 240;
   
-  float ychange = 0;
-  
-  PongPaddle(boolean left) {
-    score = 0;
-    
+  PongPaddle(boolean left) {    
     if (left) {
       x = 5;
     } else {
@@ -22,7 +18,7 @@ class PongPaddle {
     rect(x, y, w, h);
   }
   
-  // animate bounce ball
+  // switch player when ball bounce
   void bounce_ball() {
   }
 }
@@ -30,13 +26,11 @@ class PongPaddle {
 class PongBall {
   float x = width/2;
   float y = height/2;
-  float speedX, speedY;
-  float diameter;
+  float speedX = 5; 
+  float speedY = random(-5,5);
+  float diameter = 50;
   
-  PongBall(float tempDiameter) {
-    speedX = 0;
-    speedY = 0;
-    diameter = tempDiameter;
+  PongBall() {
   }
   
   // draw ball
@@ -49,22 +43,13 @@ class PongBall {
     y = y + speedY;
     x = x + speedX;
     
-    /*
-    if (ball.right() > width || ball.left() < 0) {
-      ball.speedX = -ball.speedX;
-    }
-    */
+    // ball bounce top and bottom
     if (ball.bottom() > height || ball.top() < 0) {
       ball.speedY = -ball.speedY;
     }
   }
   
-  float left() {
-    return x-diameter/2;
-  }
-  float right() {
-    return x+diameter/2;
-  }
+  // helper function
   float top() {
     return y-diameter/2;
   }
@@ -74,7 +59,6 @@ class PongBall {
 }
 
 class PongGame {
-  String entry_text = "";
   
   PongGame() {
   }
@@ -93,6 +77,16 @@ class PongGame {
   
   // draw ball at center when ball out of table
   void serve_ball() {
+    ball.x = width/2;
+    ball.y = height/2;
+    
+    float angle = random(-PI/4, PI/4);
+    ball.speedX = 5 * cos(angle);
+    ball.speedY = 5 * sin(angle);
+    
+    if (random(1) < 0.5) {
+      ball.speedY *= -1;
+    }
   }
   
   // update player bounce and score
@@ -102,13 +96,13 @@ class PongGame {
       game.serve_ball();
     }
     
-    if (ball.x - ball.diameter < 0) {
+    if (ball.x + ball.diameter < 0) {
       paddleRight.score += 1;
       game.serve_ball();
     }
   }
   
-  // move paddle?
+  // move paddle
   void on_touch_move() {
   }
 }
@@ -133,12 +127,9 @@ void setup() {
   size(1000,720);
   paddleLeft = new PongPaddle(true);
   paddleRight = new PongPaddle(false);
-  ball = new PongBall(50);
+  ball = new PongBall();
   game = new PongGame();
   app = new PongApp();
-  
-  ball.speedX = 5;
-  ball.speedY = random(-3,3);
 }
 
 void draw() {
@@ -151,6 +142,7 @@ void draw() {
   
   game.draw();
   game.update();
+  game.on_touch_move();
   
   ball.draw();
   ball.move();
