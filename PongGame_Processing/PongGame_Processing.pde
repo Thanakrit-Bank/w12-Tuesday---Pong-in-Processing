@@ -95,18 +95,6 @@ class PongGame {
   void serve_ball() {
     ball.x = width/2;
     ball.y = height/2;
-    
-    if (ball.x - ball.diameter > width) {
-      float angle = random(-PI/4, PI/4);
-      ball.speedX = 8 * cos(angle);
-      ball.speedY = 8 * sin(angle);
-    }
-    
-    if (ball.x + ball.diameter < 0) {
-      float angle = random(-PI/4, PI/4);
-      ball.speedX = 8 * cos(angle);
-      ball.speedY = 8 * sin(angle);
-    }
   }
   
   // update score when ball out of table and serve the ball
