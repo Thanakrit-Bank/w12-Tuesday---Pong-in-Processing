@@ -110,6 +110,14 @@ class PongGame {
       delay(600);
       game.serve_ball();
     }
+    
+    // when player score is 6 will set score to 0
+    if (paddleLeft.score > 5 || paddleRight.score > 5) {
+      paddleLeft.score = 0;
+      paddleRight.score = 0;
+      delay(600);
+      game.serve_ball();
+    }
   }
   
   // move paddle
